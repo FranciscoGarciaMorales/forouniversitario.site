@@ -1,9 +1,9 @@
 <?php
-// Simulación de datos actuales del usuario
+session_start();
 $user = [
-    'nombre' => 'Javier Martin',
-    'nickname' => 'javimartin',
-    'email' => 'javiermatin@correo.com',
+    'nombre' => $_SESSION['nombre'],
+    'nickname' => $_SESSION['nick'],
+    'email' => $_SESSION['email'],
 ];
 ?>
 <!DOCTYPE html>
