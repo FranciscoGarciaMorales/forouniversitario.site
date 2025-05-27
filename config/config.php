@@ -13,7 +13,7 @@ class Configuracion
 
     // Constructor privado para evitar instanciación directa
     private function __construct() {
-        $this->conn = new mysqli($this->rutaBD, $this->usuarioBD, $this->passwordBD, $this->nombreBD,3308);
+        $this->conn = new mysqli($this->rutaBD, $this->usuarioBD, $this->passwordBD, $this->nombreBD,3306);
 
         if ($this->conn->connect_error) {
             die("Error de conexión: " . $this->conn->connect_error);
