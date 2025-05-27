@@ -1,0 +1,1 @@
+listado de notificaciones con el nick del usuario

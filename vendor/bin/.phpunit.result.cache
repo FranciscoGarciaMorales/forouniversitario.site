@@ -1,0 +1,1 @@
+{"version":1,"defects":{"UsuarioTest::testBuscarUsuarioConCredencialesValidas":7},"times":{"UsuarioTest::testBuscarUsuarioConCredencialesValidas":0.005,"UsuarioTest::testBuscarUsuarioConCredencialesInvalidas":0,"UsuarioTest::testRegistrarUsuario":0.001}}

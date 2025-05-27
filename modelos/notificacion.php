@@ -1,0 +1,1 @@
+aqui va interaccion con las notificaciones en la BD

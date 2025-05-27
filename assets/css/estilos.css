@@ -1,0 +1,105 @@
+
+
+body {
+  background-color: black;
+  color: #e0e0e0;
+}
+
+.btn-primary {
+  background-color: #0056b3 !important; /* Azul más oscuro */
+  color: #ffffff !important; /* Texto blanco */
+}
+
+.btn-primary:hover {
+  background-color: #005f8a;
+  border-color: #005f8a;
+}
+.btn-secondary {
+  background-color: #0077b6; 
+  border-color: #0077b6;
+}
+
+.btn-secondary:hover {
+  background-color: #005f8a;
+  border-color: #005f8a;
+}
+/*Formulario*/
+.bg-body-tertiary {
+  background-color: #111 !important;
+  border: 1px solid #333;
+}
+
+
+
+.li-text {
+  color: #FFFFFF !important;
+}
+.link-body-emphasis {
+  color: white !important; /* O cualquier color que prefieras */
+}
+.nav-link.dropdown-toggle {
+  color: white !important; /* Hace que el icono y texto sean blancos */
+}
+
+.nav-link.dropdown-toggle:hover {
+  color: #0077b6 !important; /* Puedes cambiar a otro color visible */
+}
+.dropdown-toggle::after {
+  color: #FFFFFF !important; 
+}
+
+.btn-primary {
+  background-color: #0056b3 !important;
+}
+
+/*LOGO*/
+.logo {
+  max-width: 100%; /* Se adapta al contenedor */
+  height: auto; /* Mantiene la proporción */
+  max-height: 200px; /* Ajusta el máximo de altura (cámbialo según necesites) */
+}
+
+@media (max-width: 768px) {
+  .logo {
+      max-height: 100px; /* Tamaño más pequeño en móviles */
+  }
+}
+
+.h1-tecno {
+  color: #1768ad !important;
+  text-shadow: 2px 2px 4px rgba(0, 170, 255, 0.5);
+  font-size: clamp(1.5rem, 5vw, 3rem); /*AJUSTE DINAMICO*/
+}
+
+
+/*Registro.php*/
+.h1-new-user {
+  color: #1768ad !important;
+  text-shadow: 2px 2px 4px rgba(0, 170, 255, 0.5);
+}
+
+/*T & C*/
+.container-custom {
+  max-width: 800px;
+  margin: auto;
+  padding: 40px;
+  background-color: #212529; /* Gris oscuro */
+  border-radius: 10px;
+}
+
+
+/*FOOTER*/
+/* Cambiar color de los enlaces del footer */
+footer .nav-link {
+  color: #00aaff !important; /* Celeste tecnológico */
+}
+
+footer .nav-link:hover {
+  color: #0077b6 !important; /* Azul más oscuro al pasar el mouse */
+}
+
+/* Cambiar color del texto del footer */
+.text-footer {
+  color: #FFFFFF !important; /* Texto en gris claro */
+}
+

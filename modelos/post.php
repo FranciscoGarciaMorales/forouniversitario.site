@@ -1,0 +1,1 @@
+aqui va interaccion con los post en la BD
