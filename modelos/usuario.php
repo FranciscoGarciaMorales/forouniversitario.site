@@ -61,7 +61,7 @@ class Usuario
     }
     public function sesionUsuario($nombreUsuario)
     {
-        $sql = "SELECT nick FROM usuario WHERE email = ?";
+        $sql = "SELECT * FROM usuario WHERE email = ?";
         $stmt = $this->conn->prepare($sql);
 
         if ($stmt) {
@@ -69,11 +69,17 @@ class Usuario
             $stmt->execute();
             $result = $stmt->get_result();
 
-            if($result && $row = $result->fetch_assoc()){
+            if ($result && $row = $result->fetch_assoc()) {
                 session_start();
+
+                $_SESSION['id'] = $row['id'];
+                $_SESSION['nombre'] = $row['nombre'];
+                $_SESSION['apellidos'] = $row['apellidos'];
+                $_SESSION['fecha_nacimiento'] = $row['fecha_nacimiento'];
+                $_SESSION['email'] = $row['email'];
                 $_SESSION['nick'] = $row['nick'];
             }
-        } 
+        }
     }
 
 }

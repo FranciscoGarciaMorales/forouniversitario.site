@@ -1,14 +1,10 @@
 <?php
 session_start();
 if (isset($_SESSION['nick'])) {
-    echo "<script>alert('Bienvenido, " . $_SESSION['nick'] . "');</script>";
-}
-// Ejemplo de datos del usuario
 $user = [
-    'nombre' => 'Claudia',
-    'email' => 'javiermatin@correo.com',
+    'nombre' => $_SESSION['nick']
 ];
-
+}
 // Ejemplo para las publicaciones del usuario
 $posts = [
     [
