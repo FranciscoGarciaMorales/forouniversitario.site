@@ -81,5 +81,40 @@ class Usuario
             }
         }
     }
+    public function actualizarUsuario($id, $nombre, $nick, $email, $contrasena = null)
+    {
+        // Verificar duplicado de email o nick para otros usuarios
+        $sql = "SELECT id FROM usuario WHERE (email = ? OR nick = ?) AND id != ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssi", $email, $nick, $id);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            return ['success' => false, 'error' => 'El correo o el nickname ya está en uso.'];
+        }
+
+        // Actualizar datos
+        if ($contrasena !== null && $contrasena !== '') {
+            $sql = "UPDATE usuario SET nombre = ?, nick = ?, email = ?, contrasena = ? WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ssssi", $nombre, $nick, $email, $contrasena, $id);
+        } else {
+            $sql = "UPDATE usuario SET nombre = ?, nick = ?, email = ? WHERE id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sssi", $nombre, $nick, $email, $id);
+        }
+
+        if ($stmt->execute()) {
+            // Actualizar datos en sesión
+            $_SESSION['nombre'] = $nombre;
+            $_SESSION['nick'] = $nick;
+            $_SESSION['email'] = $email;
+
+            return ['success' => true];
+        } else {
+            return ['success' => false, 'error' => 'Error al actualizar los datos.'];
+        }
+    }
 
 }
