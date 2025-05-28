@@ -1,5 +1,4 @@
 <?php
-<<<<<<< Updated upstream
 session_start();
 require_once("../../modelos/Usuario.php");
 
@@ -24,10 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $resultado['error'];
     }
 }
-=======
 // Simulación de datos actuales del usuario
 session_start();
->>>>>>> Stashed changes
 $user = [
     'nombre' => $_SESSION['nombre'],
     'nickname' => $_SESSION['nick'],
