@@ -117,4 +117,18 @@ class Usuario
         }
     }
 
+    public function usuarioExiste($email, $nick)
+    {
+        $sql = "SELECT * FROM usuario WHERE email = ? OR nick = ?";
+        $stmt = $this->conn->prepare($sql);
+
+        if ($stmt) {
+            $stmt->bind_param("ss", $email, $nick);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->num_rows > 0;
+        } else {
+            return false;
+        }
+    }
 }

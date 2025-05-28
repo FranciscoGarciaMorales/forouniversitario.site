@@ -41,22 +41,34 @@ class UsuarioExistente
         }
     }
 
-    public function registrarUsuario()
-    {
-        $this->usuario = $_POST["nombre"] ?? "";
-        $this->apellidos = $_POST["apellidos"] ?? "";
-        $this->fecha_nacimiento = $_POST["fecha_nacimiento"] ?? "";
-        $this->email = $_POST["email"] ?? "";
-        $this->nick = $_POST["nick"] ?? "";
-        $this->contraseña = $_POST["contrasena"] ?? "";
-        if (
-            !empty($this->usuario) &&
-            !empty($this->apellidos) &&
-            !empty($this->fecha_nacimiento) &&
-            !empty($this->email) &&
-            !empty($this->nick) &&
-            !empty($this->contraseña)
-        ) {
+public function registrarUsuario()
+{
+    $this->usuario = $_POST["nombre"] ?? "";
+    $this->apellidos = $_POST["apellidos"] ?? "";
+    $this->fecha_nacimiento = $_POST["fecha_nacimiento"] ?? "";
+    $this->email = $_POST["email"] ?? "";
+    $this->nick = $_POST["nick"] ?? "";
+    $this->contraseña = $_POST["contrasena"] ?? "";
+
+    if (
+        !empty($this->usuario) &&
+        !empty($this->apellidos) &&
+        !empty($this->fecha_nacimiento) &&
+        !empty($this->email) &&
+        !empty($this->nick) &&
+        !empty($this->contraseña)
+    ) {
+        // ⚠️ Comprobación de edad mínima
+        $hoy = new DateTime();
+        $nacimiento = new DateTime($this->fecha_nacimiento);
+        $edad = $hoy->diff($nacimiento)->y;
+
+        if ($edad < 18) {
+            header("Location: ../vistas/home/registro.php");
+            exit;
+        }
+
+        if ($this->comprobarUsuarioExistente($this->email, $this->nick)) {
             $this->modelo->registrarUsuario(
                 $this->usuario,
                 $this->apellidos,
@@ -67,13 +79,20 @@ class UsuarioExistente
             );
             header("Location: ../index.php");
             exit;
-        } else {
-            echo "❌ Todos los campos son obligatorios.";
         }
-
     }
-    public function comprobarUsuarioExistente($nombre,$apellido,$email,$nick){
-        
+}
+
+    public function comprobarUsuarioExistente($email, $nick)
+    {
+        if ($this->modelo->usuarioExiste($email, $nick)) {
+            echo "<script>
+                alert('⚠️ Ya existe un usuario con ese correo o nick.');
+                window.location.href = '../vistas/home/registro.php';
+              </script>";
+            return false;
+        }
+        return true;
     }
 
 
