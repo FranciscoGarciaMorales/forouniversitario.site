@@ -11,7 +11,7 @@
 <body>
 
     <div class="container d-flex flex-column justify-content-center align-items-center vh-100 text-center">
-    <form id="contactoForm" class="w-50">
+    <form id="contactoForm" class="w-50" method="POST" action="enviarContacto.php">
         <div class="container p-5">
             <div class="row">
                 <div class="col">
