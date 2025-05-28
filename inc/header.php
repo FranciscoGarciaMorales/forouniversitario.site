@@ -14,6 +14,13 @@
         <a href="../post/nuevoPost.php" class="btn btn-primary">Crear Post</a>
       </div>
 
+      <!-- Boton modo oscuro modo claro -->
+      <script defer src="../../assets/js/boton.js"></script>
+      <button id="toggleMode" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+        <i id="modoIcono" class="bi bi-moon"></i>
+        <span id="modoTexto">Modo oscuro</span>
+      </button>
+
       <!-- Sección Derecha: Imagen y Menú desplegable alineados a la derecha -->
       <div class="d-flex align-items-center me-3">
         <div class="dropdown text-end">
