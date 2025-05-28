@@ -1,8 +1,9 @@
 <?php
 // Incluir el modelo de usuario para la validación de datos
-require_once "../modelos/usuario.php"; 
+require_once "../modelos/usuario.php";
 
-class UsuarioExistente {
+class UsuarioExistente
+{
 
     private $usuario;
     private $apellidos;
@@ -14,23 +15,25 @@ class UsuarioExistente {
     private $modelo;
 
     // Constructor de la clase
-    function __construct() {
+    function __construct()
+    {
         $this->modelo = new Usuario();
-        $this->menUsuario();       
+        $this->menUsuario();
     }
 
-    public function menUsuario(){
+    public function menUsuario()
+    {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $this->boton = $_POST["accion"] ?? null;
             switch ($this->boton) {
                 case "login":
                     $this->recibirUsuario();
                     break;
-        
+
                 case "registrar":
-                   $this->registrarUsuario();
+                    $this->registrarUsuario();
                     break;
-        
+
                 default:
                     echo "Acción no válida";
                     break;
@@ -38,7 +41,8 @@ class UsuarioExistente {
         }
     }
 
-    public function registrarUsuario(){
+    public function registrarUsuario()
+    {
         $this->usuario = $_POST["nombre"] ?? "";
         $this->apellidos = $_POST["apellidos"] ?? "";
         $this->fecha_nacimiento = $_POST["fecha_nacimiento"] ?? "";
@@ -66,12 +70,16 @@ class UsuarioExistente {
         } else {
             echo "❌ Todos los campos son obligatorios.";
         }
-       
+
+    }
+    public function comprobarUsuarioExistente($nombre,$apellido,$email,$nick){
+        
     }
 
 
     // Recibir los datos del formulario
-    public function recibirUsuario() {
+    public function recibirUsuario()
+    {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Capturamos los valores del formulario
             $this->email = $_POST["email"] ?? "";
@@ -85,7 +93,8 @@ class UsuarioExistente {
     }
 
     // Buscar usuario en la base de datos
-    public function buscarUsuario() {
+    public function buscarUsuario()
+    {
         $usuarioValido = $this->modelo->buscarUsuario($this->email, $this->contraseña);
 
         if ($usuarioValido) {
