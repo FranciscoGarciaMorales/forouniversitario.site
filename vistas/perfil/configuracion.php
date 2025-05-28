@@ -23,8 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $resultado['error'];
     }
 }
-// Simulación de datos actuales del usuario
-session_start();
 $user = [
     'nombre' => $_SESSION['nombre'],
     'nickname' => $_SESSION['nick'],
