@@ -95,7 +95,7 @@ $user = [
                 </div>
 
                 <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                <a href="index.php" class="btn btn-secondary ms-2">Cancelar</a>
+                <a href="indexperfil.php" class="btn btn-secondary ms-2">Cancelar</a>
             </form>
         </div>
     </div>
