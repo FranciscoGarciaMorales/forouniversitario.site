@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("contactoForm").addEventListener("submit", function(event) {
+    const form = document.getElementById("contactoForm");
+    const botonEnviar = form.querySelector("button[type='submit']"); 
+        
+        form.addEventListener("submit", function (event) {
         event.preventDefault(); // Evita el envío por defecto
 
         // Obtener valores
@@ -39,15 +42,38 @@ document.addEventListener("DOMContentLoaded", function() {
             mensaje.classList.add("is-valid");
         }
 
-        // Si todo está correcto, mostrar alerta y limpiar el formulario
         if (esValido) {
-            alert("Tu mensaje ha sido enviado.");
+        botonEnviar.disabled = true;  // dESABILITAMOS EL BTN ENVIAR PARA NO REENVIAR EL MISMO
+
+        const datos = new FormData();
+        datos.append("email", email.value);
+        datos.append("nombre", nombre.value);
+        datos.append("mensaje", mensaje.value);
+
+        fetch("/forouniversitario.sitegithub/controladores/notificaciones.php", {
+        method: "POST",
+        body: datos,
+        })
+        .then(response => response.text())
+        .then(respuesta => {
+        if (respuesta.trim() === "ok") {
+            alert("Tu mensaje ha sido enviado correctamente.");
             email.value = "";
             nombre.value = "";
             mensaje.value = "";
             email.classList.remove("is-valid");
             nombre.classList.remove("is-valid");
             mensaje.classList.remove("is-valid");
+        } else {
+            alert("Error al enviar el mensaje. Intenta más tarde.");    
+        }
+        botonEnviar.disabled = false;  // Aqui habilitamos
+        })
+        .catch(error => {
+        console.error("Error:", error);
+        alert("Hubo un problema al enviar el mensaje.");
+        botonEnviar.disabled = false;  // volvemos a habilitar
+        });
         }
     });
 });
