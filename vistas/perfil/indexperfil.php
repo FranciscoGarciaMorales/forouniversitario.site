@@ -40,6 +40,29 @@ $posts = [
         ]
     ]
 ];
+
+/* MOTOR DE BUSQUEDA */
+function quitarTildes($cadena) {
+    $originales = ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú'];
+    $sinTildes = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
+    return str_replace($originales, $sinTildes, $cadena);
+}
+
+if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro q y eliminación de espacios */
+    $busqueda = strtolower(trim($_GET['q'])); /* Cambiar a minuscula todo */
+    $busqueda = quitarTildes($busqueda); // Quitamos tildes de la busqueda
+    
+    $posts = array_filter($posts, function ($post) use ($busqueda) { 
+        $titulo = strtolower($post['titulo']);
+        $titulo = quitarTildes($titulo); // Quitamos tildes del título
+        
+        return strpos($titulo, $busqueda) !== false; // Buscamos coincidencias
+    });
+}
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,6 +94,10 @@ $posts = [
             <!-- Columna central (Publicaciones del usuario) -->
             <div class="col-md-6">
                 <h3>Publicaciones de <?php echo $user['nombre']; ?></h3>
+
+                <?php if (empty($posts)): ?>
+                <div class="alert alert-warning">No se encontraron publicaciones con ese término.</div>
+                <?php endif; ?>
 
                 <?php foreach ($posts as $index => $post): ?>
                     <div class="card mb-3">
