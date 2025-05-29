@@ -95,6 +95,24 @@ if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../../assets/css/estilos.css">
+    <!--Estilos de la frase-->
+    <style>
+    .frase-estilo {
+    background: linear-gradient(135deg,rgb(23, 104, 173),rgb(90, 79, 238)); /* fondo morado claro degradado */
+    padding: 20px;
+    margin: 20px 0;
+    font-style: italic;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    color: #ffffff ;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    }
+
+    .frase-estilo:hover {
+    transform: scale(1.02); /* efecto al pasar el mouse */
+    }
+</style>
 </head>
 <body>
     <?php require_once("../../inc/header.php"); ?>
@@ -160,21 +178,23 @@ if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro 
             <!-- Notificaciones-->
             <div class="col-md-3">
 
-                <!--
-                <h4 class="">Notificaciones</h4>
-                <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action">Nuevo comentario en tu publicación: "Avances en la inteligencia artificial"</a>
-                    <a href="#" class="list-group-item list-group-item-action">Tu publicación "Los mejores álbumes de los 2000" ha recibido 5 likes</a>
-                    <a href="#" class="list-group-item list-group-item-action">Nuevo comentario en tu publicación: "La última película de ciencia ficción"</a>
-                    <a href="#" class="list-group-item list-group-item-action">Tu publicación "La última película de ciencia ficción" ha recibido 3 likes</a>
-                </div>
-                -->
                 <h4>Tendencias</h4>
                 <ul class="list-group">
                     <?php foreach ($tendencias as $palabra => $frecuencia): ?>
                     <li class="list-group-item">#<?php echo ucfirst($palabra); ?> (<?php echo $frecuencia; ?>)</li>
                     <?php endforeach; ?>
                 </ul>
+
+                <!--FRASE DEL DIA: -->
+                <?php 
+                $fraseDelDia = ""; 
+                include("../../inc/frasedeldia.php"); 
+                ?>
+
+                <h4 class="mt-4">Frase del día</h4>
+                <blockquote class="frase-estilo"> 
+                <p class="mb-0"><?php echo $fraseDelDia; ?></p>
+                </blockquote>
             </div>
         </div>
     </div>
