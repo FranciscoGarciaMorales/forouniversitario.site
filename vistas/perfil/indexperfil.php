@@ -40,6 +40,28 @@ $posts = [
         ]
     ]
 ];
+/* TENDENCIAS */
+// Extraer palabras más comunes de los títulos para mostrar como tendencias
+$todasPalabras = [];
+
+foreach ($posts as $post) {
+    $titulo = quitarTildes(strtolower($post['titulo']));
+    $palabras = explode(' ', preg_replace('/[^\w\s]/', '', $titulo)); // quitar signos de puntuación
+    foreach ($palabras as $palabra) {
+        if (strlen($palabra) > 3) { // ignoramos palabras muy cortas
+            $todasPalabras[] = $palabra;
+        }
+    }
+}
+
+// Contar la frecuencia
+$tendencias = array_count_values($todasPalabras);
+
+// Ordenar por frecuencia
+arsort($tendencias);
+
+// Tomar las 5 más comunes
+$tendencias = array_slice($tendencias, 0, 5, true);
 
 /* MOTOR DE BUSQUEDA */
 function quitarTildes($cadena) {
@@ -137,6 +159,8 @@ if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro 
 
             <!-- Notificaciones-->
             <div class="col-md-3">
+
+                <!--
                 <h4 class="">Notificaciones</h4>
                 <div class="list-group">
                     <a href="#" class="list-group-item list-group-item-action">Nuevo comentario en tu publicación: "Avances en la inteligencia artificial"</a>
@@ -144,6 +168,13 @@ if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro 
                     <a href="#" class="list-group-item list-group-item-action">Nuevo comentario en tu publicación: "La última película de ciencia ficción"</a>
                     <a href="#" class="list-group-item list-group-item-action">Tu publicación "La última película de ciencia ficción" ha recibido 3 likes</a>
                 </div>
+                -->
+                <h4>Tendencias</h4>
+                <ul class="list-group">
+                    <?php foreach ($tendencias as $palabra => $frecuencia): ?>
+                    <li class="list-group-item">#<?php echo ucfirst($palabra); ?> (<?php echo $frecuencia; ?>)</li>
+                    <?php endforeach; ?>
+                </ul>
             </div>
         </div>
     </div>
