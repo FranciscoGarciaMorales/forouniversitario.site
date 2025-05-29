@@ -12,11 +12,21 @@ class Configuracion
     private $nombreBD = "foro_universitario";/* "u353229583_foro_db";*/
 
     // Constructor privado para evitar instanciación directa
-    private function __construct() {
-        $this->conn = new mysqli($this->rutaBD, $this->usuarioBD, $this->passwordBD, $this->nombreBD,3308);
-
-        if ($this->conn->connect_error) {
-            die("Error de conexión: " . $this->conn->connect_error);
+    private function __construct()
+    {
+        // Silenciar errores de conexión para evitar warnings en pantalla
+        mysqli_report(MYSQLI_REPORT_OFF);
+        
+        $puertos = [3306, 3308];
+        foreach ($puertos as $puerto) {
+            $conn = @new mysqli($this->rutaBD, $this->usuarioBD, $this->passwordBD, $this->nombreBD, $puerto);
+            if (!$conn->connect_error) {
+                $this->conn = $conn;
+                break;
+            }
+        }
+        if (!isset($this->conn)) {
+            die("No se pudo conectar a la base de datos en ninguno de los puertos.");
         }
     }
 
