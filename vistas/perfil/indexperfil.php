@@ -13,6 +13,7 @@ $posts = [
         'imagen' => '../../assets/img/publicacion1.jpg',
         'likes' => 35,
         'comentarios' => 10,
+        'tema' => 'Tecnología',
         'comentarios_lista' => [
             ['autor' => 'Carlos', 'contenido' => 'Muy interesante el artículo'],
             ['autor' => 'Ana', 'contenido' => 'Me encanta tu contenido']
@@ -24,6 +25,7 @@ $posts = [
         'imagen' => '../../assets/img/publicacion2.jpg',
         'likes' => 22,
         'comentarios' => 5,
+        'tema' => 'Música',
         'comentarios_lista' => [
             ['autor' => 'Luis', 'contenido' => 'Están buenos los álbumes']
         ]
@@ -34,12 +36,14 @@ $posts = [
         'imagen' => '../../assets/img/publicacion3.jpg',
         'likes' => 40,
         'comentarios' => 15,
+        'tema' => 'Películas y TV',
         'comentarios_lista' => [
             ['autor' => 'Marta', 'contenido' => 'Este domingo iré a verla'],
             ['autor' => 'Jorge', 'contenido' => 'La trama me parece muy intrigante.']
         ]
     ]
 ];
+
 
 /* MOTOR DE BUSQUEDA */
 function quitarTildes($cadena) {
@@ -57,6 +61,15 @@ if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro 
         $titulo = quitarTildes($titulo); // Quitamos tildes del título
         
         return strpos($titulo, $busqueda) !== false; // Buscamos coincidencias
+    });
+}
+
+if (isset($_GET['tema']) && !empty($_GET['tema'])) {
+    $temaSeleccionado = strtolower(quitarTildes($_GET['tema']));
+
+    $posts = array_filter($posts, function ($post) use ($temaSeleccionado) {
+        $temaPost = strtolower(quitarTildes($post['tema']));
+        return $temaPost === $temaSeleccionado;
     });
 }
 
@@ -80,20 +93,28 @@ if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro 
         <div class="row">
             <h4 class="">Temas</h4>
             <div class="col-md-3">
-                <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action">Tecnología</a>
-                    <a href="#" class="list-group-item list-group-item-action">Música</a>
-                    <a href="#" class="list-group-item list-group-item-action">Películas y TV</a>
-                    <a href="#" class="list-group-item list-group-item-action">Naturaleza</a>
-                    <a href="#" class="list-group-item list-group-item-action">Interesante</a>
-                    <a href="#" class="list-group-item list-group-item-action">Cultura</a>
-                    <a href="#" class="list-group-item list-group-item-action">Ocio</a>
-                </div>
+            <div class="list-group">
+                <a href="?tema=Tecnología" class="list-group-item list-group-item-action">Tecnología</a>
+                <a href="?tema=Música" class="list-group-item list-group-item-action">Música</a>
+                <a href="?tema=Películas y TV" class="list-group-item list-group-item-action">Películas y TV</a>
+                <a href="?tema=Naturaleza" class="list-group-item list-group-item-action">Naturaleza</a>
+                <a href="?tema=Interesante" class="list-group-item list-group-item-action">Interesante</a>
+                <a href="?tema=Cultura" class="list-group-item list-group-item-action">Cultura</a>
+                <a href="?tema=Ocio" class="list-group-item list-group-item-action">Ocio</a>
+            </div>
+
             </div>
 
             <!-- Columna central (Publicaciones del usuario) -->
             <div class="col-md-6">
-                <h3>Publicaciones de <?php echo $user['nombre']; ?></h3>
+                <h3>
+                     Publicaciones de <?php echo $user['nombre']; ?>
+                    <?php if (isset($_GET['tema'])): ?>
+                        <span class="text-muted"> - Tema: <?php echo htmlspecialchars($_GET['tema']); ?></span>
+                    <?php endif; ?>
+                </h3>
+
+
 
                 <?php if (empty($posts)): ?>
                 <div class="alert alert-warning">No se encontraron publicaciones con ese término.</div>
