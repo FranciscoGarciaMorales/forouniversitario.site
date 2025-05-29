@@ -40,7 +40,7 @@ $posts = [
         ]
     ]
 ];
-/* TENDENCIAS */
+/*TENDENCIAS */
 // Extraer palabras más comunes de los títulos para mostrar como tendencias
 $todasPalabras = [];
 
@@ -62,6 +62,7 @@ arsort($tendencias);
 
 // Tomar las 5 más comunes
 $tendencias = array_slice($tendencias, 0, 5, true);
+
 
 /* MOTOR DE BUSQUEDA */
 function quitarTildes($cadena) {
@@ -173,9 +174,7 @@ if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro 
                         </div>
                     </div>
                 <?php endforeach; ?>
-            </div>
-
-            <!-- Notificaciones-->
+            </div>          
             <div class="col-md-3">
 
                 <h4>Tendencias</h4>

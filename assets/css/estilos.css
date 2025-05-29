@@ -102,23 +102,3 @@ footer .nav-link:hover {
 .text-footer {
   color: #FFFFFF !important; /* Texto en gris claro */
 }
-
-
-
-/*frases*/
-.frase-estilo {
-    background: linear-gradient(135deg, #d1c4e9, #b39ddb); /* fondo morado claro degradado */
-    border-left: 8px solid #7e57c2; /* barra lateral destacada */
-    padding: 20px;
-    margin: 20px 0;
-    font-style: italic;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    color: #3e2c59;
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
-}
-
-.frase-estilo:hover {
-    transform: scale(1.02); /* efecto al pasar el mouse */
-}
