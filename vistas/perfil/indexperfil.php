@@ -43,7 +43,7 @@ $posts = [
         ]
     ]
 ];
-/* TENDENCIAS */
+/*TENDENCIAS */
 // Extraer palabras más comunes de los títulos para mostrar como tendencias
 $todasPalabras = [];
 
@@ -194,9 +194,7 @@ if (isset($_GET['tema']) && !empty($_GET['tema'])) {
                         </div>
                     </div>
                 <?php endforeach; ?>
-            </div>
-
-            <!-- Notificaciones-->
+            </div>          
             <div class="col-md-3">
 
                 <h4>Tendencias</h4>
