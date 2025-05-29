@@ -52,7 +52,7 @@ $temas = ["Tecnología", "Música", "Películas y TV", "Naturaleza", "Interesant
         <input type="hidden" name="usuario_id" value="<?= $user['id'] ?>">
 
         <button type="submit" class="btn btn-primary">Publicar</button>
-        <a href="../perfil/index.php" class="btn btn-secondary ms-2">Cancelar</a>
+        <a href="../perfil/indexperfil.php" class="btn btn-secondary ms-2">Cancelar</a>
     </form>
 </div>
 
