@@ -1,11 +1,6 @@
 <?php
 session_start();
-require_once("../../modelos/Usuario.php");
-
-if (!isset($_SESSION['id'])) {
-    header("Location: /login.php");
-    exit();
-}
+require_once("../../modelos/usuario.php");
 
 $usuarioModel = new Usuario();
 
