@@ -12,3 +12,14 @@ CREATE TABLE usuario (
     nick VARCHAR(50) NOT NULL UNIQUE,
     contrasena VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE post (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    contenido TEXT NOT NULL,
+    tema VARCHAR(100) NOT NULL,
+    usuario_id INT NOT NULL,
+    imagen VARCHAR(255), -- Ruta o nombre de archivo, puede ser NULL
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+);

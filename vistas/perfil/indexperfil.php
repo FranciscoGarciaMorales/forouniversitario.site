@@ -1,224 +1,142 @@
 <?php
 session_start();
-if (isset($_SESSION['nick'])) {
+// Si quieres que sólo lo vean usuarios logueados:
+if (!isset($_SESSION['nick']) || !isset($_SESSION['id'])) {
+    header("Location: ../login.php");
+    exit;
+}
+
+// Datos del usuario (sólo para mostrar el nombre, si quieres)
 $user = [
-    'nombre' => $_SESSION['nick']
+    'nombre' => $_SESSION['nick'],
+    'id'     => $_SESSION['id']
 ];
-}
-// Ejemplo para las publicaciones del usuario
-$posts = [
-    [
-        'titulo' => 'Avances en la inteligencia artificial',
-        'contenido' => 'La inteligencia artificial está evolucionando a pasos agigantados...',
-        'imagen' => '../../assets/img/publicacion1.jpg',
-        'likes' => 35,
-        'comentarios' => 10,
-        'tema' => 'Tecnología',
-        'comentarios_lista' => [
-            ['autor' => 'Carlos', 'contenido' => 'Muy interesante el artículo'],
-            ['autor' => 'Ana', 'contenido' => 'Me encanta tu contenido']
-        ]
-    ],
-    [
-        'titulo' => 'Los mejores álbumes de los 2000',
-        'contenido' => 'Hoy les traigo una lista con los mejores álbumes del año...',
-        'imagen' => '../../assets/img/publicacion2.jpg',
-        'likes' => 22,
-        'comentarios' => 5,
-        'tema' => 'Música',
-        'comentarios_lista' => [
-            ['autor' => 'Luis', 'contenido' => 'Están buenos los álbumes']
-        ]
-    ],
-    [
-        'titulo' => 'La última película de ciencia ficción',
-        'contenido' => 'Una crítica sobre la última película que está arrasando en taquilla...',
-        'imagen' => '../../assets/img/publicacion3.jpg',
-        'likes' => 40,
-        'comentarios' => 15,
-        'tema' => 'Películas y TV',
-        'comentarios_lista' => [
-            ['autor' => 'Marta', 'contenido' => 'Este domingo iré a verla'],
-            ['autor' => 'Jorge', 'contenido' => 'La trama me parece muy intrigante.']
-        ]
-    ]
-];
-/*TENDENCIAS */
-// Extraer palabras más comunes de los títulos para mostrar como tendencias
-$todasPalabras = [];
 
-foreach ($posts as $post) {
-    $titulo = quitarTildes(strtolower($post['titulo']));
-    $palabras = explode(' ', preg_replace('/[^\w\s]/', '', $titulo)); // quitar signos de puntuación
-    foreach ($palabras as $palabra) {
-        if (strlen($palabra) > 3) { // ignoramos palabras muy cortas
-            $todasPalabras[] = $palabra;
-        }
-    }
-}
+// Cargamos el modelo de posts
+require_once(__DIR__ . '/../../modelos/post.php');
+// Obtenemos **todos** los posts del foro
+$posts = obtenerPosts();
 
-// Contar la frecuencia
-$tendencias = array_count_values($todasPalabras);
-
-// Ordenar por frecuencia
-arsort($tendencias);
-
-// Tomar las 5 más comunes
-$tendencias = array_slice($tendencias, 0, 5, true);
-
-
-/* MOTOR DE BUSQUEDA */
+// Función para quitar tildes
 function quitarTildes($cadena) {
-    $originales = ['á', 'é', 'í', 'ó', 'ú', 'Á', 'É', 'Í', 'Ó', 'Ú'];
-    $sinTildes = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
+    $originales = ['á','é','í','ó','ú','Á','É','Í','Ó','Ú'];
+    $sinTildes  = ['a','e','i','o','u','A','E','I','O','U'];
     return str_replace($originales, $sinTildes, $cadena);
 }
 
-if (isset($_GET['q']) && !empty(trim($_GET['q']))) { /* Recepción de parametro q y eliminación de espacios */
-    $busqueda = strtolower(trim($_GET['q'])); /* Cambiar a minuscula todo */
-    $busqueda = quitarTildes($busqueda); // Quitamos tildes de la busqueda
-    
-    $posts = array_filter($posts, function ($post) use ($busqueda) { 
-        $titulo = strtolower($post['titulo']);
-        $titulo = quitarTildes($titulo); // Quitamos tildes del título
-        
-        return strpos($titulo, $busqueda) !== false; // Buscamos coincidencias
+// Filtro de búsqueda
+if (!empty($_GET['q'])) {
+    $q = quitarTildes(strtolower(trim($_GET['q'])));
+    $posts = array_filter($posts, function($p) use ($q) {
+        return strpos(quitarTildes(strtolower($p['titulo'])), $q) !== false;
+    });
+}
+// Filtro por tema
+if (!empty($_GET['tema'])) {
+    $t = quitarTildes(strtolower($_GET['tema']));
+    $posts = array_filter($posts, function($p) use ($t) {
+        return quitarTildes(strtolower($p['tema'])) === $t;
     });
 }
 
-if (isset($_GET['tema']) && !empty($_GET['tema'])) {
-    $temaSeleccionado = strtolower(quitarTildes($_GET['tema']));
-
-    $posts = array_filter($posts, function ($post) use ($temaSeleccionado) {
-        $temaPost = strtolower(quitarTildes($post['tema']));
-        return $temaPost === $temaSeleccionado;
-    });
+// Generamos tendencias
+$todas = [];
+foreach ($posts as $p) {
+    $palabras = preg_split('/\W+/', quitarTildes(strtolower($p['titulo'])));
+    foreach ($palabras as $w) {
+        if (strlen($w) > 3) $todas[] = $w;
+    }
 }
-
-
-
-
+$tendencias = array_count_values($todas);
+arsort($tendencias);
+$tendencias = array_slice($tendencias, 0, 5, true);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../../assets/css/estilos.css">
-    <!--Estilos de la frase-->
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Perfil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/estilos.css">
+  <style>
     .frase-estilo {
-    background: linear-gradient(135deg,rgb(23, 104, 173),rgb(90, 79, 238)); /* fondo morado claro degradado */
-    padding: 20px;
-    margin: 20px 0;
-    font-style: italic;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    color: #ffffff ;
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
+      background: linear-gradient(135deg,rgb(23,104,173),rgb(90,79,238));
+      padding:20px; margin:20px 0; font-style:italic;
+      border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      color:#fff; font-size:1.2rem; transition:transform .3s ease;
     }
-
-    .frase-estilo:hover {
-    transform: scale(1.02); /* efecto al pasar el mouse */
-    }
-</style>
+    .frase-estilo:hover { transform:scale(1.02); }
+  </style>
 </head>
 <body>
-    <?php require_once("../../inc/header.php"); ?>
-    <div class="container mt-5">
-        <div class="row">
-            <h4 class="">Temas</h4>
-            <div class="col-md-3">
-            <div class="list-group">
-                <a href="?tema=Tecnología" class="list-group-item list-group-item-action">Tecnología</a>
-                <a href="?tema=Música" class="list-group-item list-group-item-action">Música</a>
-                <a href="?tema=Películas y TV" class="list-group-item list-group-item-action">Películas y TV</a>
-                <a href="?tema=Naturaleza" class="list-group-item list-group-item-action">Naturaleza</a>
-                <a href="?tema=Interesante" class="list-group-item list-group-item-action">Interesante</a>
-                <a href="?tema=Cultura" class="list-group-item list-group-item-action">Cultura</a>
-                <a href="?tema=Ocio" class="list-group-item list-group-item-action">Ocio</a>
-            </div>
-
-            </div>
-
-            <!-- Columna central (Publicaciones del usuario) -->
-            <div class="col-md-6">
-                <h3>
-                     Publicaciones de <?php echo $user['nombre']; ?>
-                    <?php if (isset($_GET['tema'])): ?>
-                        <span class="text-muted"> - Tema: <?php echo htmlspecialchars($_GET['tema']); ?></span>
-                    <?php endif; ?>
-                </h3>
-
-
-
-                <?php if (empty($posts)): ?>
-                <div class="alert alert-warning">No se encontraron publicaciones con ese término.</div>
-                <?php endif; ?>
-
-                <?php foreach ($posts as $index => $post): ?>
-                    <div class="card mb-3">
-                        <img src="<?php echo $post['imagen']; ?>" class="card-img-top" alt="Imagen de publicación">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $post['titulo']; ?></h5>
-                            <p class="card-text"><?php echo $post['contenido']; ?></p>
-                            
-                            <!-- Likes y comentarios -->
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <span class="badge bg-primary btn-primary"><?php echo $post['likes']; ?> Likes</span>
-                                    <span class="badge bg-success btn-primary"><?php echo $post['comentarios']; ?> Comentarios</span>
-                                </div>
-                                <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#comentarios<?php echo $index; ?>" aria-expanded="false" aria-controls="comentarios<?php echo $index; ?>">
-                                    Ver comentarios
-                                </button>
-                            </div>
-
-                            <!-- Sección de comentarios -->
-                            <div class="collapse" id="comentarios<?php echo $index; ?>">
-                                <div class="mt-3">
-                                    <?php foreach ($post['comentarios_lista'] as $comentario): ?>
-                                        <div class="mb-2">
-                                            <strong><?php echo $comentario['autor']; ?></strong>
-                                            <p><?php echo $comentario['contenido']; ?></p>
-                                        </div>
-                                    <?php endforeach; ?>
-                                    <textarea class="form-control" rows="2" placeholder="Escribe un comentario..."></textarea>
-                                    <button class="btn btn-primary mt-2">Responder</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>          
-            <div class="col-md-3">
-
-                <h4>Tendencias</h4>
-                <ul class="list-group">
-                    <?php foreach ($tendencias as $palabra => $frecuencia): ?>
-                    <li class="list-group-item">#<?php echo ucfirst($palabra); ?> (<?php echo $frecuencia; ?>)</li>
-                    <?php endforeach; ?>
-                </ul>
-
-                <!--FRASE DEL DIA: -->
-                <?php 
-                $fraseDelDia = ""; 
-                include("../../inc/frasedeldia.php"); 
-                ?>
-
-                <h4 class="mt-4">Frase del día</h4>
-                <blockquote class="frase-estilo"> 
-                <p class="mb-0"><?php echo $fraseDelDia; ?></p>
-                </blockquote>
-            </div>
+  <?php require_once("../../inc/header.php"); ?>
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Temas -->
+      <div class="col-md-3">
+        <h4>Temas</h4>
+        <div class="list-group">
+          <?php foreach (["Tecnología","Música","Películas y TV","Naturaleza","Interesante","Cultura","Ocio"] as $tema): ?>
+            <a href="?tema=<?=urlencode($tema)?>" class="list-group-item list-group-item-action">
+              <?=htmlspecialchars($tema)?>
+            </a>
+          <?php endforeach; ?>
         </div>
+      </div>
+      <!-- Posts -->
+      <div class="col-md-6">
+        <h3>
+          <?= isset($_GET['tema'])
+              ? "Publicaciones - Tema: ".htmlspecialchars($_GET['tema'])
+              : "Todas las publicaciones" ?>
+        </h3>
+        <?php if (empty($posts)): ?>
+          <div class="alert alert-warning">No hay publicaciones.</div>
+        <?php endif; ?>
+        <?php foreach ($posts as $i => $post): ?>
+          <div class="card mb-3">
+            <?php if (!empty($post['imagen'])): ?>
+              <img src="../../assets/img/<?=basename($post['imagen'])?>" class="card-img-top" alt="">
+            <?php endif; ?>
+            <div class="card-body">
+              <h5 class="card-title"><?=htmlspecialchars($post['titulo'])?></h5>
+              <p class="card-text"><?=nl2br(htmlspecialchars($post['contenido']))?></p>
+              <div class="d-flex justify-content-between">
+                <div>
+                  <span class="badge bg-primary"><?=$post['likes'] ?? 0?> Likes</span>
+                  <span class="badge bg-success"><?=$post['comentarios'] ?? 0?> Comentarios</span>
+                </div>
+                <button class="btn btn-link" data-bs-toggle="collapse" data-bs-target="#com<?=$i?>" aria-expanded="false">Ver comentarios</button>
+              </div>
+              <div class="collapse" id="com<?=$i?>">
+                <div class="mt-3">
+                  <?php foreach ($post['comentarios_lista'] ?? [] as $c): ?>
+                    <strong><?=htmlspecialchars($c['autor'])?></strong>
+                    <p><?=htmlspecialchars($c['contenido'])?></p>
+                  <?php endforeach; ?>
+                  <textarea class="form-control" rows="2" placeholder="Escribe un comentario..."></textarea>
+                  <button class="btn btn-primary mt-2">Responder</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+      <!-- Tendencias y frase -->
+      <div class="col-md-3">
+        <h4>Tendencias</h4>
+        <ul class="list-group">
+          <?php foreach ($tendencias as $pal => $f): ?>
+            <li class="list-group-item">#<?=ucfirst(htmlspecialchars($pal))?> (<?=$f?>)</li>
+          <?php endforeach; ?>
+        </ul>
+        <?php include("../../inc/frasedeldia.php"); ?>
+        <h4 class="mt-4">Frase del día</h4>
+        <blockquote class="frase-estilo"><?=htmlspecialchars($fraseDelia ?? $fraseDelDia)?></blockquote>
+      </div>
     </div>
-
-    <!--Script bootstrap-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
