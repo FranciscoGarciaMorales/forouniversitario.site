@@ -19,7 +19,7 @@ CREATE TABLE post (
     contenido TEXT NOT NULL,
     tema VARCHAR(100) NOT NULL,
     usuario_id INT NOT NULL,
-    imagen VARCHAR(255), -- Ruta o nombre de archivo, puede ser NULL
+    imagen VARCHAR(255), 
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );

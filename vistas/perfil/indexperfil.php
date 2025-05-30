@@ -1,10 +1,7 @@
 <?php
 session_start();
-// Si quieres que sólo lo vean usuarios logueados:
-if (!isset($_SESSION['nick']) || !isset($_SESSION['id'])) {
-    header("Location: ../login.php");
-    exit;
-}
+$user_nick = $_SESSION['nick'] ?? 'Invitado';
+$user_id   = $_SESSION['id']   ?? null;
 
 // Datos del usuario (sólo para mostrar el nombre, si quieres)
 $user = [
