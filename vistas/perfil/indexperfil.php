@@ -12,16 +12,9 @@ $soloMisPosts = true;
 // Cargamos el modelo de posts
 require_once(__DIR__ . '/../../modelos/post.php');
 // Obtenemos **todos** los posts del foro
-//$posts = obtenerPosts();
-if (isset($_GET['tema'])) {
-    // Si hay un tema seleccionado, mostrar todos los posts de ese tema (de todos los usuarios)
-    $soloMisPosts = false;
-    $posts = obtenerPosts(); // sin ID de usuario, para obtener todos
-} else {
-    // Si no hay tema, mostrar solo mis posts
-    $soloMisPosts = true;
-    $posts = obtenerPosts($user_id);
-}
+$posts = obtenerPosts();
+
+
 // Función para quitar tildes
 function quitarTildes($cadena) {
     $originales = ['á','é','í','ó','ú','Á','É','Í','Ó','Ú'];
@@ -93,14 +86,14 @@ $tendencias = array_slice($tendencias, 0, 5, true);
       <div class="col-md-6">
         <h3>
           <?php if (isset($soloMisPosts) && $soloMisPosts): ?>
-    <?= isset($_GET['tema']) 
-        ? "Publicaciones - Tema: ".htmlspecialchars($_GET['tema'])." de @".htmlspecialchars($user_nick)
-        : "Todas las publicaciones de @".htmlspecialchars($user_nick) ?>
-  <?php else: ?>
-    <?= isset($_GET['tema']) 
-        ? "Publicaciones - Tema: ".htmlspecialchars($_GET['tema']) 
-        : "Todas las publicaciones" ?>
-  <?php endif; ?>
+          <?= isset($_GET['tema']) 
+          ? "Publicaciones - Tema: ".htmlspecialchars($_GET['tema'])." de @".htmlspecialchars($user_nick)
+          : "Todas las publicaciones de @".htmlspecialchars($user_nick) ?>
+          <?php else: ?>
+          <?= isset($_GET['tema']) 
+          ? "Publicaciones - Tema: ".htmlspecialchars($_GET['tema']) 
+          : "Todas las publicaciones" ?>
+        <?php endif; ?>
         </h3>
         <?php if (empty($posts)): ?>
           <div class="alert alert-warning">No hay publicaciones.</div>
