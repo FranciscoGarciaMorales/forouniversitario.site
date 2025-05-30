@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body>
+  <?php require_once("inc/headerindex.php"); ?>
     <div class="b-example-divider"></div>
 
     <div class="container col-xl-10 col-xxl-8 px-4 py-5">
@@ -18,7 +19,7 @@
           <h1 class="display-3 fw-bold lh-1 text-body-emphasis mb-3 h1-tecno text-center fs-1 fs-md-2 fs-lg-3">  Foro_Universitario  </h1> 
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
-          <form action="controladores/usuarioControlador.php" method="POST" class="p-4 p-md-5 border rounded-3 bg-body-tertiary">  <!--ERROR EN RUTA ANTERIOR-->
+          <form action="controladores/usuarioControlador.php" method="POST" class="p-4 p-md-5 border rounded-3 bg-body text-body">  <!--ERROR EN RUTA ANTERIOR-->
             <div class="form-floating mb-3">
               <input name="email"type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
               <label for="floatingInput">Email</label>
@@ -54,6 +55,7 @@
 
 ?>
     <!--Script JS-->
+    <script src="assets/js/boton.js"></script>
     <script src="assets/js/validacionSesion.js"></script>
     <!--Script bootstrap-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -5,7 +5,7 @@ class Configuracion
     private static $instance = null;
     private $conn;
 
-    private $rutaServidor = "http://localhost/forounivesitario.site";/*"http://localhost/Proyecto_ForoUniversitario2";*/
+    private $rutaServidor = "http://localhost/forounivesitario.sitegithub";/*"http://localhost/Proyecto_ForoUniversitario2";*/
     private $rutaBD = "localhost";
     private $usuarioBD = "root"; /*"u353229583_foro_user";*/
     private $passwordBD = "";/*"74217151Ytg.";*/
