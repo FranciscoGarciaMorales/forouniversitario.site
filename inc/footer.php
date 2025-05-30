@@ -3,9 +3,9 @@
 <footer class="py-3 my-4 text-center mt-auto">
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
 <!--LAS RUTAS DE ESTE FICHERO DEBEN CAMBIAR SEGÚN CLONE Y COPIA DEL NOMBRE DE DESCARGA (FOROUNIVERSITARIO.SITEGITHUB)-->
-      <li class="nav-item"><a href="/forouniversitario.site/index.php" class="nav-link px-2 text-body-secondary">Inicio</a></li> 
-      <li class="nav-item"><a href="/forouniversitario.site/inc/terminos.html" class="nav-link px-2 text-body-secondary">Term. & Cond.</a></li>
-      <li class="nav-item"><a href="/forouniversitario.site/inc/contacto.php" class="nav-link px-2 text-body-secondary">Contacto</a></li>
+      <li class="nav-item"><a href="/forouniversitario.sitegithub/index.php" class="nav-link px-2 text-body-secondary">Inicio</a></li> 
+      <li class="nav-item"><a href="/forouniversitario.sitegithub/inc/terminos.php" class="nav-link px-2 text-body-secondary">Term. & Cond.</a></li>
+      <li class="nav-item"><a href="/forouniversitario.sitegithub/inc/contacto.php" class="nav-link px-2 text-body-secondary">Contacto</a></li>
     </ul>
     <p class="text-center text-body-secondary text-footer">&copy; 2025 Foro Universitario, Group 19</p>
     <!-- Validación de CSS -->

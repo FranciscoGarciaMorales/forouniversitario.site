@@ -29,6 +29,15 @@ body.dark {
   transform: rotate(180deg);
 }
 
+.container-custom.light {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.container-custom.dark {
+  background-color: #212529 !important;
+  color: #ffffff !important;
+}
 
 .card.light {
   background-color: #ffffff !important;

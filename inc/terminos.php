@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../assets/css/estilos.css">
 </head>
-<body>
+<body class="light">
+    <?php require_once("headerindex.php"); ?>
     <div class="container text-justify mt-5">
-        <div class="container-custom p-4">
+        <div class="container-custom p-4 light" >
             <h2 class="mb-4 text-center">Términos y Condiciones del Foro Universitario</h2>
             <p> Última actualización: 17/03/2025 <br>
                 <br>
@@ -55,6 +56,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="../assets/js/boton.js"></script>
 </body>
 </html>
